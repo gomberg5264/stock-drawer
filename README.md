@@ -1,7 +1,7 @@
 # EXAMPLES
 
-![apple example](misc\aapl_example.PNG?raw=true)
-![microsoft_example](misc\msft_example.PNG?raw=true)
+![apple example](misc/aapl_example.PNG?raw=true)
+![microsoft_example](misc/msft_example.PNG?raw=true)
 
 
 
