@@ -16,10 +16,13 @@ class Stock extends React.Component {
         */
         super(props) ; 
         this.state = { 
-            ticker: null,
+            ticker: '',
             x_values: [],
             y_values: {}
         }
+
+        this.updateTicker = this.updateTicker.bind(this) ;
+        this.submitTicker = this.submitTicker.bind(this) ;
     }
 
     componentDidMount(){
@@ -30,10 +33,9 @@ class Stock extends React.Component {
         /*
         Fetches a stock 
         */
-        const ticker = 'IBM' ;
         const api_key = '6GK1I729285WW00D' ;
         const instance = this ;
-        let request = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${ticker}&apikey=${api_key}` ;
+        let request = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${this.state.ticker}&apikey=${api_key}` ;
 
         fetch(request)
             .then(
@@ -52,8 +54,6 @@ class Stock extends React.Component {
                         "close": []
                     } ;
 
-                    console.log(data) ;
-
                     for(var key in data['Time Series (Daily)']){
                         temp_x_values.push(key) ;
                         temp_y_values["open"].push(data['Time Series (Daily)'][key]['1. open']) ;
@@ -61,11 +61,8 @@ class Stock extends React.Component {
                         temp_y_values["low"].push(data['Time Series (Daily)'][key]['3. low']) ;
                         temp_y_values["close"].push(data['Time Series (Daily)'][key]['4. close']) ;
                     }
-
-                    console.log(temp_y_values) ;
                     
                     instance.setState({
-                        ticker: ticker, 
                         x_values: temp_x_values, 
                         y_values: temp_y_values 
                     }) ;
@@ -73,9 +70,34 @@ class Stock extends React.Component {
             )
     }
 
+    updateTicker(event){
+        this.setState({
+            ticker: event.target.value
+        }) ;
+    }
+
+    submitTicker(event){
+        console.log(this.state) ;
+        this.fetchStock() ; 
+    }
+    
+
     render(){
         return(
             <div>
+
+            <br></br>
+
+            <input 
+                type="text" 
+                value={this.state.ticker} 
+                onChange={this.updateTicker}/>
+
+            <button 
+                type="button" 
+                onClick={this.submitTicker}>Search</button>
+
+
             <h1>Stock Market</h1>
             <Plot
               data={[
